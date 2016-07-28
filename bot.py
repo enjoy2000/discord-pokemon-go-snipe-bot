@@ -9,6 +9,8 @@ import re
 
 # Config your token
 token = 'API_TOKEN'
+# Channel to manage
+bot_channel = 'rare_spottings'
 
 client = discord.Client()
 
@@ -25,16 +27,15 @@ async def on_message(message):
 
     # patern for check string contains lat/long
     partern = "(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)"
-
-    print(message.content)
     
-    if re.match(partern, message.content):
-        # Message contains lat/long
-        print('ok')
-    else:
-        # Delete message if not contain lat/long
-        print('Need to delete')
-        await client.delete_message(message)
+    # Manage channel rare_spottings only
+    if message.channel == bot_channel:
+        if re.match(partern, message.content):
+            # Message contains lat/long
+            print('ok')
+        else:
+            # Delete message if not contain lat/long
+            await client.delete_message(message)
 
 # Start client
 client.run(token)
