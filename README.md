@@ -1,0 +1,1 @@
+# discord-pokemon-go-snipe-bot
