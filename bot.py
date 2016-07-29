@@ -5,17 +5,24 @@
 
 import asyncio
 import discord
+import json
 import re
-
-# Config your token
-token = 'API_TOKEN'
-# Channel to manage
-bot_channel = 'rare_spottings'
 
 client = discord.Client()
 
+config = {}
+with open('config.json') as output:
+    # Load json to config object
+    config = json.load(output)
+
+api_key = config.get('api_key', 'NA')
+channels = config.get('channels', [])    
+
 @client.event
 async def on_ready():
+    if api_key == 'NA':
+        raise Exception('Please specify your api key!')
+
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
@@ -28,14 +35,13 @@ async def on_message(message):
     # patern for check string contains lat/long
     partern = "(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)"
     
+    print(message.content +': '+ message.channel.name)
     # Manage channel rare_spottings only
-    if message.channel == bot_channel:
-        if re.match(partern, message.content):
-            # Message contains lat/long
-            print('ok')
-        else:
+    if message.channel.name in channels:
+        print('this channel')
+        if not re.match(partern, message.content):
             # Delete message if not contain lat/long
             await client.delete_message(message)
 
 # Start client
-client.run(token)
+client.run(api_key)
