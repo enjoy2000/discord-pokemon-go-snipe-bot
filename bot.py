@@ -35,10 +35,8 @@ async def on_message(message):
     # patern for check string contains lat/long
     partern = "(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)"
     
-    print(message.content +': '+ message.channel.name)
     # Manage channel rare_spottings only
     if message.channel.name in channels:
-        print('this channel')
         if not re.match(partern, message.content):
             # Delete message if not contain lat/long
             await client.delete_message(message)
