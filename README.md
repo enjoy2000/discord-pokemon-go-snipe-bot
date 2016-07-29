@@ -43,7 +43,7 @@ python3 bot.py
 https://discordapp.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permissions=0
 ```
 - Intergrate your authorized app
-![Open Server settings](https://github.com/enjoy2000/discord-snipe-chat-bot/raw/master/docs/open-server-settings.png)
-![Connect](https://github.com/enjoy2000/discord-snipe-chat-bot/raw/master/docs/click-connect.png)
-![Choose Your App](https://github.com/enjoy2000/discord-snipe-chat-bot/raw/master/docs/choose-authorized-app.png)
+![Open Server settings](https://raw.githubusercontent.com/enjoy2000/discord-pokemon-go-snipe-bot/master/docs/choose-authorized-app.png)
+![Connect](https://raw.githubusercontent.com/enjoy2000/discord-pokemon-go-snipe-bot/master/docs/click-connect.png)
+![Choose Your App](https://raw.githubusercontent.com/enjoy2000/discord-pokemon-go-snipe-bot/master/docs/choose-authorized-app.png)
 - After that click on `Permissions` tab to grant permissions to your bot
