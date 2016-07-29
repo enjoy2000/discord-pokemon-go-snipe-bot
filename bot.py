@@ -32,7 +32,10 @@ async def get_rare_pokemons():
 
     print('Doing tasks')
 
-    req = Request('http://pokesnipers.com/api/v1/pokemon.json', headers={'User-Agent': 'Mozilla/5.0'})
+    req = Request('http://pokesnipers.com/api/v1/pokemon.json', headers = {
+        'User-Agent': 'Mozilla/5.0',
+        'Cache-Control': 'max-age=0'
+        })
     json_string = urlopen(req).read()
     data = json.loads(json_string.decode('utf-8'))
 
