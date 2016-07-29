@@ -89,8 +89,9 @@ async def on_message(message):
     if message.channel.name in channels:
         if not re.match(partern, message.content):      
             # Log & print out
-            print('Message has been deleted: {}'.format(message.content))
-            logging.warning(message.content)
+            log_message = 'Message has been deleted: {} - Author: {}'.format(message.content, message.author.name)
+            print(log_message)
+            logging.warning(log_message)
 
             # Delete message if not contain lat/long
             await client.delete_message(message)
