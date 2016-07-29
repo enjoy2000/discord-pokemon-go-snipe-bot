@@ -39,7 +39,9 @@ python3 bot.py
 ## Adding Bot To Your Channel
 - Go to [Discord Developers Page](https://discordapp.com/developers/applications/me) to create your bot.
 - Open this url with your client_id to authorize your app
-```https://discordapp.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permissions=0```
+```
+https://discordapp.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permissions=0
+```
 - Intergrate your authorized app
 ![Open Server settings](https://github.com/enjoy2000/discord-snipe-chat-bot/raw/master/docs/open-server-settings.png)
 ![Connect](https://github.com/enjoy2000/discord-snipe-chat-bot/raw/master/docs/click-connect.png)
