@@ -40,7 +40,7 @@ async def get_rare_pokemons():
     shout_out_channels = []
     for server in client.servers:
         for channel in server.channels:
-            if channel.name in channels:
+            if channel.name in config.get('scrawl_channels', []):
                 shout_out_channels.append(discord.Object(channel.id))
 
     if len(shout_out_channels) == 0:
@@ -50,7 +50,7 @@ async def get_rare_pokemons():
     while not client.is_closed:
         message =  ''
         for pokemon in data.get('results'):
-            message += pokemon.get('coords') + ' ' + pokemon.get('name') + ' IV 0%' + "\r\n"
+            message += pokemon.get('coords') + ' ' + pokemon.get('name') + "\r\n"
 
         for channel in shout_out_channels:
             await client.send_message(channel, message)
