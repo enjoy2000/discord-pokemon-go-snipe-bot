@@ -6,9 +6,15 @@
 import asyncio
 import discord
 import json
+import logging
 import re
 
+from urllib.request import Request, urlopen
+
 client = discord.Client()
+
+# config logging
+logging.basicConfig(filename = 'messages.log', level = logging.WARNING)
 
 config = {}
 with open('config.json') as output:
@@ -18,6 +24,37 @@ with open('config.json') as output:
 api_key = config.get('api_key', 'NA')
 channels = config.get('channels', [])
 except_roles = config.get('except_roles', [])
+"""
+Worker to get rare pokemon from http://pokesnipers.com/api/v1/pokemon.json
+"""
+async def get_rare_pokemons():
+    await client.wait_until_ready()
+
+    print('Doing tasks')
+
+    req = Request('http://pokesnipers.com/api/v1/pokemon.json', headers={'User-Agent': 'Mozilla/5.0'})
+    json_string = urlopen(req).read()
+    data = json.loads(json_string.decode('utf-8'))
+
+    # get arrays channels id need to shou
+    shout_out_channels = []
+    for server in client.servers:
+        for channel in server.channels:
+            if channel.name in channels:
+                shout_out_channels.append(discord.Object(channel.id))
+
+    if len(shout_out_channels) == 0:
+        raise Exception("No channel to shout out!")
+        
+
+    while not client.is_closed:
+        message =  ''
+        for pokemon in data.get('results'):
+            message += pokemon.get('coords') + ' ' + pokemon.get('name') + ' IV 0%' + "\r\n"
+
+        for channel in shout_out_channels:
+            await client.send_message(channel, message)
+        await asyncio.sleep(config.get('delay_scrawl', 300)) # task runs every 60 seconds
 
 @client.event
 async def on_ready():
@@ -31,6 +68,10 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    # Do nothing if bot is sending message
+    if message.author == client.user:
+        return None
+
     """
     Ignore if message from except roles
     """
@@ -46,11 +87,17 @@ async def on_message(message):
     
     # Manage channel rare_spottings only
     if message.channel.name in channels:
-        if not re.match(partern, message.content):       
+        if not re.match(partern, message.content):      
+            # Log & print out
             print('Message has been deleted: {}'.format(message.content))
+            logging.warning(message.content)
 
             # Delete message if not contain lat/long
             await client.delete_message(message)
+
+
+# Loop task
+client.loop.create_task(get_rare_pokemons())
 
 # Start client
 client.run(api_key)

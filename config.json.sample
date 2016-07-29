@@ -8,5 +8,6 @@
 		"Admin",
 		"Moderators",
 		"Partners"
-	]
+	],
+	"delay_scrawl": 300
 }
