@@ -16,7 +16,8 @@ with open('config.json') as output:
     config = json.load(output)
 
 api_key = config.get('api_key', 'NA')
-channels = config.get('channels', [])    
+channels = config.get('channels', [])
+except_roles = config.get('except_roles', [])
 
 @client.event
 async def on_ready():
@@ -30,8 +31,16 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # Check if message contains lat/long
+    """
+    Ignore if message from except roles
+    """
+    for role in message.author.roles:
+        if role.name in except_roles:
+            return None
 
+    """
+    Check if message contains lat/long
+    """
     # patern for check string contains lat/long
     partern = "(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)"
     
