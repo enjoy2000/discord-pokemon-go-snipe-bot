@@ -1,12 +1,11 @@
 # discord-pokemon-go-snipe-bot
 ### You have to grant `Manage Messages` to your bot
 
-Simple chat bot to delete messages that not contain lat/long
+Simple chat bot to delete messages that not contain lat/long and pokemon name
 So message for `spottings` need to be in this format
 ```
-lat/long IV pokemon_name
+lat,long pokemon_name [IV] [extra info]
 ```
-no matter what the order.
 
 If not, the messages will be deleted automatically.
 
