@@ -30,15 +30,6 @@ Worker to get rare pokemon from http://pokesnipers.com/api/v1/pokemon.json
 async def get_rare_pokemons():
     await client.wait_until_ready()
 
-    print('Doing tasks')
-
-    req = Request('http://pokesnipers.com/api/v1/pokemon.json', headers = {
-        'User-Agent': 'Mozilla/5.0',
-        'Cache-Control': 'max-age=0'
-        })
-    json_string = urlopen(req).read()
-    data = json.loads(json_string.decode('utf-8'))
-
     # get arrays channels id need to shou
     shout_out_channels = []
     for server in client.servers:
@@ -51,6 +42,19 @@ async def get_rare_pokemons():
         
 
     while not client.is_closed:
+
+        print('Scrawling..')
+
+        req = Request(
+            'http://pokesnipers.com/api/v1/pokemon.json',
+            headers = {
+                'User-Agent': 'Mozilla/5.0',
+                'Cache-Control': 'max-age=0, private, must-revalidate'
+            }
+        )
+        json_string = urlopen(req).read()
+        data = json.loads(json_string.decode('utf-8'))
+
         message =  ''
         for pokemon in data.get('results'):
             message += pokemon.get('coords') + ' ' + pokemon.get('name') + "\r\n"
