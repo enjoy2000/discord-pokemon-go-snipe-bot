@@ -1,6 +1,8 @@
 # discord-pokemon-go-snipe-bot
 *You have to grant `Manage Messages` to your bot*
 
+[Buy me a beer](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2LXD5Y426K3QY)
+
 Simple chat bot to delete messages that not contain lat/long and pokemon name
 So message for `spottings` need to be in this format
 ```
@@ -33,7 +35,10 @@ Grab your `api_key` (bot token) and put it in `config.json`, also modify your ch
 
 Finaly start your bot
 ```bash
-python3 bot.py
+python3 bot.py # For messages management
+```
+```bash
+python3 bot.py scrawl # For pokenipers.com scrawler
 ```
 *You can use some `processes monitor` like [Monit](https://mmonit.com/monit/) or [Supervisor](http://supervisord.org/) to keep your bot alive.
 ## Adding Bot To Your Channel
