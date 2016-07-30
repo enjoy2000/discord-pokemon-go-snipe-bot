@@ -26,6 +26,21 @@ api_key = config.get('api_key', 'NA')
 channels = config.get('channels', [])
 except_roles = config.get('except_roles', [])
 
+"""
+Check if there is blacklisted word in message or not
+"""
+def is_blacklisted(message_content):
+    blacklist = config.get('blacklist', [])
+
+    # If blacklist is empty dont use black list 
+    if len(blacklist) == 0:
+        return False
+
+    for word in blacklist:
+        if word in message_content:
+            return True    
+
+
 @client.event
 async def on_ready():
     if api_key == 'NA':
@@ -39,7 +54,7 @@ async def on_ready():
 """
 python3 bot.py scrawl
 """
-if len(sys.argv) > 1 and sys.argv[1] == 'scrawl' :
+if len(sys.argv) > 1 and sys.argv[1] == 'scrawl':
     """
     Worker to get rare pokemons from http://pokesnipers.com/api/v1/pokemon.json
     """
@@ -83,9 +98,6 @@ if len(sys.argv) > 1 and sys.argv[1] == 'scrawl' :
     # Loop task
     client.loop.create_task(get_rare_pokemons())
 
-"""
-python3 bot.py
-"""
 else:
     """
     Event loop on every message receive
@@ -111,7 +123,7 @@ else:
         
         # Manage channel rare_spottings only
         if message.channel.name in channels:
-            if not re.match(partern, message.content):      
+            if (not re.match(partern, message.content)) or is_blacklisted(message.content):      
                 # Log & print out
                 log_message = 'Message has been deleted: {} - Author: {}'.format(message.content, message.author.name)
                 print(log_message)
@@ -119,7 +131,5 @@ else:
 
                 # Delete message if not contain lat/long
                 await client.delete_message(message)
-
-
 # Start client
 client.run(api_key)

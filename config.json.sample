@@ -4,13 +4,20 @@
 		"your_snipe_channel1",
 		"your_snipe_channel2"
 	],
-	"scrawl_channels": [
-		"rare_spottings"
-	],
+	"delay_scrawl": 300,
 	"except_roles": [
 		"Admin",
 		"Moderators",
 		"Partners"
 	],
-	"delay_scrawl": 300
+	"blacklist": [
+		"confirm",
+		"confirmed",
+		"yes",
+		"no",
+		"nothing"
+	],
+	"scrawl_channels": [
+		"rare_spottings"
+	]
 }
