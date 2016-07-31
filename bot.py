@@ -14,6 +14,8 @@ from urllib.request import Request, urlopen
 
 client = discord.Client()
 
+print(__name__)
+
 # config logging
 logging.basicConfig(filename = 'messages.log', level = logging.WARNING)
 
@@ -40,11 +42,11 @@ def is_blacklisted(message_content):
         if word in message_content:
             return True    
 
+if api_key == 'NA':
+    raise Exception('Please specify your api key!')
 
 @client.event
 async def on_ready():
-    if api_key == 'NA':
-        raise Exception('Please specify your api key!')
 
     print('Logged in as')
     print(client.user.name)
@@ -61,7 +63,7 @@ if len(sys.argv) > 1 and sys.argv[1] == 'scrawl':
     async def get_rare_pokemons():
         await client.wait_until_ready()
 
-        # get arrays channels id need to shou
+        # get arrays channels id need to post
         shout_out_channels = []
         for server in client.servers:
             for channel in server.channels:
@@ -131,5 +133,41 @@ else:
 
                 # Delete message if not contain lat/long
                 await client.delete_message(message)
+
+    """
+    Announcement
+    """
+    print(config.get('announcement'))
+    if config.get('announcement', None):
+        async def announcement():
+            print('Posting announcements..')
+
+            announcement = config.get('announcement')
+            message = announcement.get('message', None)
+            delay = announcement.get('delay', 300)
+
+            if not message:
+                print('Please config your announcement message')
+                sys.exit()
+
+            await client.wait_until_ready()
+
+            # get arrays channels id need to post
+            announcement_channels = []
+            for server in client.servers:
+                for channel in server.channels:
+                    if channel.name in channels:
+                        announcement_channels.append(discord.Object(channel.id))
+
+            while not client.is_closed:
+                for channel in announcement_channels:
+                    await client.send_message(channel, message)
+            
+                await asyncio.sleep(delay)
+
+        # Loop task
+        client.loop.create_task(announcement())
+
+
 # Start client
 client.run(api_key)
