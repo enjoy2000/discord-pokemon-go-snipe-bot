@@ -14,8 +14,6 @@ from urllib.request import Request, urlopen
 
 client = discord.Client()
 
-print(__name__)
-
 # config logging
 logging.basicConfig(filename = 'messages.log', level = logging.WARNING)
 
@@ -90,7 +88,7 @@ if len(sys.argv) > 1 and sys.argv[1] == 'scrawl':
 
             message =  ''
             for pokemon in data.get('results'):
-                message += pokemon.get('coords') + ' ' + pokemon.get('name') + "\r\n"
+                message += "{:40} {:20}\n".format(pokemon.get('coords'), pokemon.get('name'))
 
             for channel in shout_out_channels:
                 await client.send_message(channel, message)
