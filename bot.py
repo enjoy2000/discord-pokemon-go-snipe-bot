@@ -252,7 +252,7 @@ else:
 
             if not message:
                 print('Please config your announcement message')
-                sys.exit()
+                return
 
             await client.wait_until_ready()
 
