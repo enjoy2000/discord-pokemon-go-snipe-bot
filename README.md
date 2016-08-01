@@ -8,6 +8,10 @@ So message for `spottings` need to be in this format
 ```
 lat,long pokemon_name [IV] [extra info]
 ```
+or
+```
+pokemon_name lat,long [IV] [extra info]
+```
 
 If not, the messages will be deleted automatically.
 
