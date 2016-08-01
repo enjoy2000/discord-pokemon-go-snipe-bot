@@ -88,7 +88,7 @@ if len(sys.argv) > 1 and sys.argv[1] == 'scrawl':
 
             message =  ''
             for pokemon in data.get('results'):
-                message += "{:20} {:40}\n".format(pokemon.get('name'), pokemon.get('coords'))
+                message += "`{}` {}\n".format(pokemon.get('name'), pokemon.get('coords'))
 
             for channel in shout_out_channels:
                 await client.send_message(channel, message)
