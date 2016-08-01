@@ -23,5 +23,13 @@
 	],
 	"scrawl_channels": [
 		"rare_spottings"
-	]
+	],
+	"scrawl_trackemon": {
+		"enabled": true,
+		"pokemons": [
+			"Snorlax",
+			"Dragonite",
+			"Arcanine"
+		]
+	}
 }
