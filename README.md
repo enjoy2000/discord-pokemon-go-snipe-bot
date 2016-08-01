@@ -8,6 +8,10 @@ So message for `spottings` need to be in this format
 ```
 lat,long pokemon_name [IV] [extra info]
 ```
+or
+```
+pokemon_name lat,long [IV] [extra info]
+```
 
 If not, the messages will be deleted automatically.
 
@@ -39,6 +43,9 @@ python3 bot.py # For messages management
 ```
 ```bash
 python3 bot.py scrawl # For pokenipers.com scrawler
+```
+```bash
+python3 bot.py trackemon # For trackemon.com scrawler, check config `scrawl_trackemon`
 ```
 *You can use some `processes monitor` like [Monit](https://mmonit.com/monit/) or [Supervisor](http://supervisord.org/) to keep your bot alive.
 ## Adding Bot To Your Channel
