@@ -40,6 +40,9 @@ python3 bot.py # For messages management
 ```bash
 python3 bot.py scrawl # For pokenipers.com scrawler
 ```
+```bash
+python3 bot.py trackemon # For trackemon.com scrawler, check config `scrawl_trackemon`
+```
 *You can use some `processes monitor` like [Monit](https://mmonit.com/monit/) or [Supervisor](http://supervisord.org/) to keep your bot alive.
 ## Adding Bot To Your Channel
 - Go to [Discord Developers Page](https://discordapp.com/developers/applications/me) to create your bot.
