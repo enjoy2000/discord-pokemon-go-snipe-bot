@@ -31,6 +31,8 @@ Usually `pip` will handle these for you.
 
 ```bash
 git clone git@github.com:enjoy2000/discord-pokemon-go-snipe-bot.git
+# if you got `permission denied` message use this command
+# git clone https://github.com/enjoy2000/discord-pokemon-go-snipe-bot.git
 cd discord-pokemon-go-snipe-bot
 pip3 install -r requirements.txt
 cp config.json.sample config.json
