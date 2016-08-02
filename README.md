@@ -18,7 +18,7 @@ If not, the messages will be deleted automatically.
 
 ## Requirements
 
-- Python 3.4.2+
+- Python 3.5+
 - `aiohttp` library
 - `websockets` library
 - `PyNaCl` library (optional, for voice only)
