@@ -4,6 +4,7 @@
 #
 
 import asyncio
+import cfscrape
 import discord
 import json
 import logging
@@ -158,11 +159,10 @@ if len(sys.argv) > 1 and sys.argv[1] == 'scrawl':
 
             print('Scrawling PokeSnipers..')
 
-            req = Request(
-                'http://pokesnipers.com/api/v1/pokemon.json',
-                headers=headers
-            )
-            json_string = urlopen(req).read()
+            # Use scraper to bypass cloudflare ddos protection
+            scraper = cfscrape.create_scraper()
+            json_string = scraper.get('http://pokesnipers.com/api/v1/pokemon.json', headers=headers).content
+
             data = json.loads(json_string.decode('utf-8'))
 
             message = ''
