@@ -29,6 +29,12 @@ with open('config.json') as output:
 api_key = config.get('api_key', 'NA')
 channels = config.get('channels', [])
 except_roles = config.get('except_roles', [])
+user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+# header with fake user_agrent & no cache
+headers = {
+    "User-Agent": user_agent,
+    'Cache-Control': 'max-age=0, private, must-revalidate'
+}
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -46,10 +52,34 @@ def is_blacklisted(message_content):
         if word in message_content:
             return True
 
+def _get_trackemon_session():
+    # start sessions to keep session/cookies
+    session = requests.session()
+    # get session_id by fetching root
+    first_response = session.get('http://www.trackemon.com/', headers=headers)
 
-def scrawl_trackemon(pokemon_name):
+    pattern = re.compile(r'sessionId\s=\s\'\w+\'')
+    session_id_string = re.search(
+        pattern, first_response.content.decode('utf-8'))
+    if session_id_string:
+        # Found string, split session id
+        session_id = session_id_string.group().replace(
+            'sessionId = ', '').replace('\'', '')
+    else:
+        raise Exception('Can\'t retrieve session id for api.')
+
+    obj = lambda: None
+    obj.session = session
+    obj.session_id = session_id
+
+    return obj    
+
+
+def scrawl_trackemon(pokemon_name, session_data):
     """ Scrawl api from trackemon.com """
 
+    session = session_data.session
+    session_id = session_data.session_id
     api_root = 'http://www.trackemon.com/'
     pokemon_name = pokemon_name.upper()
 
@@ -62,21 +92,6 @@ def scrawl_trackemon(pokemon_name):
         sys.exit()
 
     api_endpoint = '{}fetch/rare?pokedexTypeId={}&sessionId={}'
-
-    # start sessions to keep session/cookies
-    session = requests.session()
-    # get session_id by fetching root
-    first_response = session.get('http://www.trackemon.com/')
-
-    pattern = re.compile(r'sessionId\s=\s\'\w+\'')
-    session_id_string = re.search(
-        pattern, first_response.content.decode('utf-8'))
-    if session_id_string:
-        # Found string, split session id
-        session_id = session_id_string.group().replace(
-            'sessionId = ', '').replace('\'', '')
-    else:
-        raise Exception('Can\'t retrieve session id for api.')
 
     endpoint = api_endpoint.format(api_root, pokemon_id, session_id)
     print(endpoint)
@@ -145,10 +160,7 @@ if len(sys.argv) > 1 and sys.argv[1] == 'scrawl':
 
             req = Request(
                 'http://pokesnipers.com/api/v1/pokemon.json',
-                headers={
-                    'User-Agent': 'Mozilla/5.0',
-                    'Cache-Control': 'max-age=0, private, must-revalidate'
-                }
+                headers=headers
             )
             json_string = urlopen(req).read()
             data = json.loads(json_string.decode('utf-8'))
@@ -188,16 +200,19 @@ elif len(sys.argv) > 1 and sys.argv[1] == 'trackemon':
             while not client.is_closed:
                 print('Scrawling Trackemon..')
 
+                # get trackemon session
+                session_data = _get_trackemon_session()
+
                 if 'pokemons' in config.get('scrawl_trackemon'):
                     pokemon_names = config.get('scrawl_trackemon')['pokemons']
                     for pokemon_name in pokemon_names:
-                        message = scrawl_trackemon(pokemon_name)
+                        message = scrawl_trackemon(pokemon_name, session_data)
                         
                         if len(message):
                             for channel in shout_out_channels:
                                 await client.send_message(channel, message)
 
-                await asyncio.sleep(config.get('delay_scrawl', 300) * len(pokemon_names))  # increase delay to finish task
+                await asyncio.sleep(config.get('delay_scrawl', 300))  # increase delay to finish task
 
         # Loop task
         client.loop.create_task(scrawl_trackemon_worker())
