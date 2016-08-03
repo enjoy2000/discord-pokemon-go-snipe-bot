@@ -38,16 +38,7 @@ class Trackemon(BaseWorker):
         while not self.client.is_closed:
             logger.log('Scrawling Trackemon..', 'green')
 
-            if not self.session_id:
-                # get trackemon session
-                session_id = self._get_trackemon_session()
-
-                if not session_id:
-                    logger.log(
-                        'Cannot retrieve session id for Trackemon', 'red')
-                    return
-                else:
-                    self.session_id = session_id
+            self._retrieve_session_id()
 
             # use multiprocessing
             if 'pokemons' in self.config.get('scrawl_trackemon'):
@@ -64,6 +55,19 @@ class Trackemon(BaseWorker):
 
             # increase delay to finish task
             await asyncio.sleep(self.config.get('delay_scrawl', 300))
+
+    def _retrieve_session_id(self, delay=5):
+        if not self.session_id:
+            # get trackemon session
+            session_id = self._get_trackemon_session()
+
+            if not session_id:
+                logger.log(
+                    'Cannot retrieve session id for Trackemon.. Trying again', 'red')
+                time.sleep(delay)
+                return self._retrieve_session_id()
+            else:
+                self.session_id = session_id
 
     def _get_trackemon_session(self):
         session = self.bot.session
