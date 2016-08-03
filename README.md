@@ -59,3 +59,12 @@ https://discordapp.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permission
 - Add bot to your server
 ![Add bot to your server](https://raw.githubusercontent.com/enjoy2000/discord-pokemon-go-snipe-bot/master/docs/add-bot-to-your-server.png)
 - Now you can run bot to manage your channels
+
+## FAQ
+
+- If you got this error `JSONDecodeError`
+please check your `config.json` syntax
+- If you got `Permission Denied` when clone
+try with `https` source
+- Scrawlers post nothing
+check config `scrawl_channels` or maybe the `api` is dead
