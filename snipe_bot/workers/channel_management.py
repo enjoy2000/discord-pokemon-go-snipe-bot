@@ -76,7 +76,7 @@ class ChannelManagement(BaseWorker):
                 # Delete message if not contain lat/long
                 return True
 
-    def _is_blacklisted(message_content):
+    def _is_blacklisted(self, message_content):
         """ Check if there is blacklisted word in message or not """
 
         blacklist = self.config.get('blacklist', [])
