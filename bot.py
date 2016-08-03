@@ -6,6 +6,7 @@
 import asyncio
 import cfscrape
 import discord
+import itertools
 import json
 import logging
 import os.path
@@ -14,8 +15,9 @@ import requests
 import sys
 import time
 
-from enums import Pokemon
 from bot import logger
+from enums import Pokemon
+from multiprocessing.dummy import Pool as ThreadPool
 from urllib.request import Request, urlopen
 
 client = discord.Client()
@@ -83,18 +85,13 @@ def _get_trackemon_session():
         init_session()
         return None
 
-    obj = lambda: None
-    obj.session = session
-    obj.session_id = session_id
-
-    return obj    
+    return session_id    
 
 
-def scrawl_trackemon(pokemon_name, session_data):
+def scrawl_trackemon(pokemon_name, session_id):
     """ Scrawl api from trackemon.com """
 
-    session = session_data.session
-    session_id = session_data.session_id
+    global session
     api_root = 'http://www.trackemon.com/'
 
     # get pokemon id
@@ -220,25 +217,32 @@ elif len(sys.argv) > 1 and sys.argv[1] == 'trackemon':
                 raise Exception("No channel to shout out!")
 
             while not client.is_closed:
-                logger.log('Scrawling Trackemon..', 'green')
+                try:
+                    logger.log('Scrawling Trackemon..', 'green')
 
-                # get trackemon session
-                session_data = _get_trackemon_session()
+                    # get trackemon session
+                    session_id = _get_trackemon_session()
 
-                if not session_data:
-                    logger.log('no session data')
-                    client.loop.call_soon()
+                    if not session_id:
+                        logger.log('no session id')
+                        client.loop.call_soon()
 
-                if 'pokemons' in config.get('scrawl_trackemon'):
-                    pokemon_names = config.get('scrawl_trackemon')['pokemons']
-                    for pokemon_name in pokemon_names:
-                        message = scrawl_trackemon(pokemon_name, session_data)
-                        
-                        if len(message):
-                            for channel in shout_out_channels:
-                                await client.send_message(channel, message)
 
-                await asyncio.sleep(config.get('delay_scrawl', 300))  # increase delay to finish task
+                    # use multiprocessing
+                    if 'pokemons' in config.get('scrawl_trackemon'):
+                        pokemon_names = config.get('scrawl_trackemon')['pokemons']
+
+                        pool = ThreadPool(5)  # 5 subprocess
+                        messages = pool.starmap(scrawl_trackemon, zip(pokemon_names, itertools.repeat(session_id)))
+
+                        for message in messages:
+                            if len(message):
+                                for channel in shout_out_channels:
+                                    await client.send_message(channel, message)
+
+                    await asyncio.sleep(config.get('delay_scrawl', 300))  # increase delay to finish task
+                except:
+                    print('There is some error..', 'red')
 
         # Loop task
         client.loop.create_task(scrawl_trackemon_worker())
