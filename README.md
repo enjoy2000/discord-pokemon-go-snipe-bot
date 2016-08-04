@@ -1,7 +1,6 @@
 # discord-pokemon-go-snipe-bot
 *You have to grant `Manage Messages` to your bot*
-
-[Buy me a beer](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2LXD5Y426K3QY)
+[Python Pokemon Sniper](https://github.com/enjoy2000/PokemonGo-Bot) <br />
 
 Simple chat bot to delete messages that not contain lat/long and pokemon name
 So message for `spottings` need to be in this format
@@ -60,11 +59,15 @@ https://discordapp.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permission
 ![Add bot to your server](https://raw.githubusercontent.com/enjoy2000/discord-pokemon-go-snipe-bot/master/docs/add-bot-to-your-server.png)
 - Now you can run bot to manage your channels
 
+#### Donation
+Feel free to buy me a beer <br />
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2LXD5Y426K3QY)
+
 ## FAQ
 
-- If you got this error `JSONDecodeError`
-please check your `config.json` syntax
-- If you got `Permission Denied` when clone
+- If you got this error `JSONDecodeError` <br />
+please check your `config.json` syntax 
+- If you got `Permission Denied` when clone <br />
 try with `https` source
-- Scrawlers post nothing
+- Scrawlers post nothing <br />
 check config `scrawl_channels` or maybe the `api` is dead
