@@ -8,6 +8,7 @@ import sys
 
 from snipe_bot import SnipeBot, logger
 
+# test
 client = discord.Client()
 
 if __name__ == '__main__':
